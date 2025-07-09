@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Employee Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f7fa;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        form input {
+            flex: 1;
+            padding: 0.6rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        form button {
+            padding: 0.6rem 1rem;
+            background: #28a745;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background: #218838;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        button.delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button.delete-btn:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Employee Management System</h1>
+
+    <form id="employeeForm">
+        <input type="text" id="name" placeholder="Name" required />
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="text" id="department" placeholder="Department" required />
+        <button type="submit">Add Employee</button>
+    </form>
+
+    <h2>All Employees</h2>
+    <table id="employeeTable">
+        <thead>
+        <tr>
+            <th>ID</th><th>Name</th><th>Email</th><th>Department</th><th>Actions</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    const apiUrl = "http://localhost:8080/api/employees";
+
+    document.addEventListener("DOMContentLoaded", loadEmployees);
+    document.getElementById("employeeForm").addEventListener("submit", createEmployee);
+
+    function loadEmployees() {
+        fetch(apiUrl)
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.querySelector("#employeeTable tbody");
+                tbody.innerHTML = "";
+                data.forEach(emp => {
+                    tbody.innerHTML += `
+              <tr>
+                <td>${emp.id}</td>
+                <td>${emp.name}</td>
+                <td>${emp.email}</td>
+                <td>${emp.department}</td>
+                <td>
+                  <button class="delete-btn" onclick="deleteEmployee(${emp.id})">Delete</button>
+                </td>
+              </tr>
+            `;
+                });
+            });
+    }
+
+    function createEmployee(e) {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const department = document.getElementById("department").value;
+
+        fetch(apiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, department })
+        })
+            .then(res => res.json())
+            .then(() => {
+                loadEmployees();
+                document.getElementById("employeeForm").reset();
+            });
+    }
+
+    function deleteEmployee(id) {
+        fetch(`${apiUrl}/${id}`, { method: "DELETE" })
+            .then(() => loadEmployees());
+    }
+</script>
+</body>
+</html>
