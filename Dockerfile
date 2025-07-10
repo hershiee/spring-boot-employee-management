@@ -18,8 +18,9 @@ COPY src src
 # Build the application using Maven wrapper
 RUN ./mvnw clean install -DskipTests
 
-# Expose port 8080 (default Spring Boot port)
-EXPOSE 8080
+# Configure port for Railway
+ENV PORT=8080
+EXPOSE $PORT
 
-# Run the application
-CMD ["java", "-jar", "target/*.jar"]
+# Run the application with dynamic port
+CMD ["sh", "-c", "java -Dserver.port=$PORT -jar target/*.jar"]

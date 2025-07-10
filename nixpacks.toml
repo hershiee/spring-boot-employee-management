@@ -5,4 +5,4 @@ cmds = ["./mvnw clean install -DskipTests"]
 cmd = "java -jar target/employee-management-0.0.1-SNAPSHOT.jar"
 
 [variables]
-JAVA_VERSION = "21"
+JAVA_VERSION = "17"
