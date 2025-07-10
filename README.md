@@ -98,7 +98,7 @@ Role-based access (Admin/User)
 
 React frontend
 
-Deploy to Render/Netlify
+Deploy to Railway(Deployment)
 
 
 ## 🙌 Acknowledgements
