@@ -66,7 +66,7 @@ spring-boot-employee-management/
 ## 📸 Preview
 
 ![Project Overview]
-(https://github.com/hershiee/spring-boot-employee-management/blob/main/employee-management/projectOverview.png.png)
+projectOverview.png.png
 
 ---
 
